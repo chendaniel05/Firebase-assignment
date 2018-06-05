@@ -9,20 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDFaQPDH3f4SHIR1LERCYjG7WblavfyqAk",
-    authDomain: "myfirstpro-e0456.firebaseapp.com",
-    databaseURL: "https://myfirstpro-e0456.firebaseio.com",
-    projectId: "myfirstpro-e0456",
-    storageBucket: "myfirstpro-e0456.appspot.com",
-    messagingSenderId: "1050939951002"
-  };
-  firebase.initializeApp(config);
-</script>
 </head>
 
 <body>
@@ -39,7 +25,7 @@
 
             <div class="col-md-12 bg-secondary">
                 <h3>Current Train schedule</h3>
-                    <table class="table">
+                    <table class="table" id="trainTable">
                             <thead>
                               <tr>
                                 <th scope="col">Train Name</th>
@@ -62,25 +48,39 @@
                     <form>
                             <div class="form-group">
                               <label for="Train Name">Train Name</label>
-                              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                              <small id="emailHelp" class="form-text text-muted"></small>
+                              <input type="text" class="form-control" id="trainNameInput" aria-describedby="emailHelp">
                             </div>
                             <div class="form-group">
                               <label for="Destination">Destination</label>
-                              <input type="password" class="form-control" id="exampleInputPassword1">
+                              <input type="text" class="form-control" id="destinationInput">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">First Train Time (HH:mm - military time)</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1">
+                                <input type="text" class="form-control" id="trainTimeInput">
                             </div>
                             <div class="form-group">
                                 <label for="Frequency">Frequency (min)</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1">
+                                <input type="text" class="form-control" id="frequencyInput">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                           </form>
             </div>
         </div>
     </div>
+
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAJJSn0D4iNN014tEAkVcCmit6Niof7ahk",
+    authDomain: "train-scheduler-3d9ec.firebaseapp.com",
+    databaseURL: "https://train-scheduler-3d9ec.firebaseio.com",
+    projectId: "train-scheduler-3d9ec",
+    storageBucket: "train-scheduler-3d9ec.appspot.com",
+    messagingSenderId: "762862042657"
+  };
+  firebase.initializeApp(config);
+</script>
+    <script src="javascript/script.js"></script>
 </body>
 </html>
