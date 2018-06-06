@@ -1,69 +1,110 @@
-$(document).ready(function(){
-	// 1. Link to Firebase
-	var trainData = new Firebase("https://train-scheduler-3d9ec.firebaseio.com/");
+// global firebase moment //
 
-	// 2. Button for adding Trains
+// Steps to complete:
+
+// 1. Initialize Firebase
+// 2. Create button for adding new Train - then update the html + update the database
+// 3. Create a way to retrieve Train from the Train Time database.
+// 4. Create a way to calculate the next arrival. Using difference between first Train and frequency.
+//    Then use moment.js formatting to set difference in minutes.
+// 5. Calculate minutes away
+
+$( document ).ready(function() {
+	// Initialize Firebase
+	var config = {
+		apiKey: "AIzaSyAJJSn0D4iNN014tEAkVcCmit6Niof7ahk",
+		authDomain: "train-scheduler-3d9ec.firebaseapp.com",
+		databaseURL: "https://train-scheduler-3d9ec.firebaseio.com",
+		projectId: "train-scheduler-3d9ec",
+		storageBucket: "train-scheduler-3d9ec.appspot.com",
+		messagingSenderId: "762862042657"
+	  };
+	  firebase.initializeApp(config);
+	
+	// create a variable to refrence the database
+	  var database = firebase.database();
+	
+	// variables to define input from text box
+	
+	  var trainName = "";
+	  var destination = "";
+	  var firstTrainTime = "";
+	  var frequency = 0;
+	  var minutesAway = 0;
+	
+	// 2. Button for adding Train
 	$("#addTrainBtn").on("click", function(){
-
-		// Grabs user input and assign to variables
-		var trainName = $("#trainNameInput").val().trim();
-		var destination = $("#destinationInput").val().trim();
-		var trainTimeInput = moment($("#trainTimeInput").val().trim(), "HH:mm").subtract(10, "years").format("X");;
-		var frequencyInput = $("#frequencyInput").val().trim();
-
-		// Test for variables entered
-		console.log(trainName);
-		console.log(destination);
-		console.log(trainTimeInput);
-		console.log(frequencyInput);
-
-		// Creates local "temporary" object for holding train data
-		// Will push this to firebase
-		var newTrain = {
-			name:  trainName,
-			destination: destination,
-			trainTime: trainTimeInput,
-			frequency: frequencyInput,
-		}
-
-		// pushing trainInfo to Firebase
-		trainData.push(newTrain);
-
-		// clear text-boxes
-		$("#trainNameInput").val("");
-		$("#destinationInput").val("");
-		$("#trainInput").val("");
-		$("#frequencyInput").val("");
-
-		// Prevents page from refreshing
-		return false;
+	  event.preventDefault();
+	
+	// take user input 
+	  var trainName = $("#trainNameInput").val().trim();
+	  var destination = $("#destinationInput").val().trim();
+	  var firstTrainTime = moment($("#firstTrainTimeInput").val().trim(), "HH:mm").format("X");
+	  var frequency = $("#frequencyInput").val().trim();
+	
+	// Setting up the JSON for database
+	  var newTrain = {
+		trainName: trainName,
+		destination: destination,
+		firstTrainTime: firstTrainTime,
+		frequency: frequency 
+	  };
+	
+	  // Uploads Train data to the database
+	  database.ref().push(newTrain);
+	  console.log(newTrain);
+	
+	  // Alert
+	  alert("Train successfully added");
+	
+	  // Clears all of the text-boxes
+	  $("#trainNameInput").val("");
+	  $("#destinationInput").val("");
+	  $("#firstTrainTimeInput").val("");
+	  $("#frequencyInput").val("");
+	
+	  // Prevents moving to new page
+	  return false;
 	});
-
-	trainData.on("child_added", function(childSnapshot, prevChildKey){
-
-		console.log(childSnapshot.val());
-
-		// assign firebase variables to snapshots.
-		var firebaseName = childSnapshot.val().name;
-		var firebaseDestination = childSnapshot.val().destination;
-		var firebaseTrainTimeInput = childSnapshot.val().trainTime;
-		var firebaseFrequency = childSnapshot.val().frequency;
-		
-		var diffTime = moment().diff(moment.unix(firebaseTrainTimeInput), "minutes");
-		var timeRemainder = moment().diff(moment.unix(firebaseTrainTimeInput), "minutes") % firebaseFrequency ;
-		var minutes = firebaseFrequency - timeRemainder;
-
-		var nextTrainArrival = moment().add(minutes, "m").format("hh:mm A"); 
-		
-		// Test for correct times and info
-		console.log(minutes);
-		console.log(nextTrainArrival);
-		console.log(moment().format("hh:mm A"));
-		console.log(nextTrainArrival);
-		console.log(moment().format("X"));
-
-		// Append train info to table on page
-		$("#trainTable > tbody").append("<tr><td>" + firebaseName + "</td><td>" + firebaseLine + "</td><td>"+ firebaseDestination + "</td><td>" + firebaseFrequency + " mins" + "</td><td>" + nextTrainArrival + "</td><td>" + minutes + "</td></tr>");
-
+	
+	//  Created a firebase event listner for adding trains to database and a row in the html when the user adds an entry
+	database.ref().on("child_added", function(childSnapshot) {
+	
+	  console.log(childSnapshot.val());
+	
+	  // Store everything into a variable.
+	  var trainName = childSnapshot.val().trainName;
+	  var destination = childSnapshot.val().destination;
+	  var firstTrainTime = childSnapshot.val().firstTrainTime;
+	  var frequency = childSnapshot.val().frequency;
+	
+	  // Train Info
+	  console.log(trainName);
+	  console.log(destination);
+	  console.log(firstTrainTime);
+	  console.log(frequency);
+	
+	  //Math for turning train arrival time from military time to 12 hours 
+	  var trainArrival = moment.unix(firstTrainTime).format("hh:mm a");
+	  console.log(trainArrival);
+	
+	 //Math to figure out how many minutes till next train
+	  var timeConverted = moment(firstTrainTime, "hh:mm").subtract(1, "years");
+		console.log(timeConverted);
+	  var diffTime = moment().diff(moment(timeConverted), "minutes");
+		console.log("DIFFERENCE IN TIME: " + diffTime);
+	  var tRemainder = diffTime % frequency;
+		console.log(tRemainder);
+	  var tMinutesTillTrain = frequency - tRemainder;
+		console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain); 
+	
+	//Adds each train's data into the table
+	  $("#Traintable > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
+	  frequency + "</td><td>" + trainArrival + "</td><td>" + tMinutesTillTrain + "</td><td>");
+	
+	//For error handling
+	}, function(errorObject){
+	console.log("The read failed: " + errorObject.code)
 	});
-});
+	});
+	  

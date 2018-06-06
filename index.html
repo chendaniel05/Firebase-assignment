@@ -9,8 +9,13 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Firebase Reference -->
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <!-- Moment.js Reference -->
+    <script src="http://momentjs.com/downloads/moment.js"></script>   
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+ 
 </head>
-
 <body>
     <div class="container">
         <div class="row">
@@ -48,7 +53,7 @@
                     <form>
                             <div class="form-group">
                               <label for="Train Name">Train Name</label>
-                              <input type="text" class="form-control" id="trainNameInput" aria-describedby="emailHelp">
+                              <input type="text" class="form-control" id="trainNameInput">
                             </div>
                             <div class="form-group">
                               <label for="Destination">Destination</label>
@@ -56,31 +61,17 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">First Train Time (HH:mm - military time)</label>
-                                <input type="text" class="form-control" id="trainTimeInput">
+                                <input type="text" class="form-control" id="firstTrainTimeInput">
                             </div>
                             <div class="form-group">
                                 <label for="Frequency">Frequency (min)</label>
                                 <input type="text" class="form-control" id="frequencyInput">
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary" id="addTrainBtn">Submit</button>
                           </form>
             </div>
         </div>
     </div>
-
-<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyAJJSn0D4iNN014tEAkVcCmit6Niof7ahk",
-    authDomain: "train-scheduler-3d9ec.firebaseapp.com",
-    databaseURL: "https://train-scheduler-3d9ec.firebaseio.com",
-    projectId: "train-scheduler-3d9ec",
-    storageBucket: "train-scheduler-3d9ec.appspot.com",
-    messagingSenderId: "762862042657"
-  };
-  firebase.initializeApp(config);
-</script>
-    <script src="javascript/script.js"></script>
+<script src="javascript/script.js"></script>
 </body>
 </html>
